@@ -35,7 +35,28 @@ set incsearch
 set showmatch
 set hlsearch
 noremap <silent> <leader><space> :noh<cr>:call clearmatches()<cr>
-nnoremap <leader>a :Ack<space>
+
+"nnoremap <leader>a :Ack<space>
+map <Leader>rt :wa<CR>:call VimuxRunCommand("clear; rspec " . bufname("%"))<CR>
+map <Leader>ra :wa<CR>:call VimuxRunCommand("clear; rspec")<CR>
+map <Leader>rs :wa<CR>:call VimuxRunCommand("clear; rspec " . bufname("%") . ":" . line("."))<CR>
+map <Leader>vl :wa<CR>:VimuxRunLastCommand<CR>
+
+" ctags
+nnoremap <Leader>ca :!ctags -R<CR>
+
+" hit ,f to find the definition of the current class
+" this uses ctags. the standard way to get this is Ctrl-]
+nnoremap <silent> ,f <C-]>
+
+" use ,F to jump to tag in a vertical split
+nnoremap <silent> ,F :let word=expand("<cword>")<CR>:vsp<CR>:wincmd w<cr>:exec("tag ". word)<cr>")"
+
+"switch vim windows without using C-W first
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
 
 set cursorline
 set wrap
@@ -96,6 +117,9 @@ let g:CommandTCancelMap=['<Esc>', '<C-c>']
 let g:CommandTMaxHeight=10
 
 imap <C-L> <SPACE>=><SPACE>
+
+"git shortcuts
+map <silent> <LocalLeader>gg :Ggrep <C-R><C-W><CR>
 
 " copy and paste to Mac OS X clipboard
 noremap <leader>y "*y
@@ -169,3 +193,16 @@ function! ScratchToggle()
 endfunction
 
 nnoremap <silent> <leader><tab> :ScratchToggle<cr>
+
+"set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+Bundle 'christoomey/vim-tmux-navigator'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+

@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 git_bundles = [
+  "https://github.com/ecomba/vim-ruby-refactoring",
+  "https://github.com/nelstrom/vim-qargs",
   "https://github.com/tpope/vim-sensible",
   "https://github.com/christoomey/vim-tmux-navigator",
   "git://github.com/ervandew/supertab.git",

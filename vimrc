@@ -23,11 +23,13 @@ set shiftwidth=2
 set softtabstop=2
 set expandtab
 
-nmap , \
+map , \
+let mapleader = ","
+
 
 " search
-nnoremap / /\v
-vnoremap / /\v
+"nnoremap / /\v
+"vnoremap / /\v
 set ignorecase
 set smartcase
 set gdefault
@@ -36,14 +38,17 @@ set showmatch
 set hlsearch
 noremap <silent> <leader><space> :noh<cr>:call clearmatches()<cr>
 
+"reformats page and go to last edit location
+map <Leader>= gg=Gg;
+
 "nnoremap <leader>a :Ack<space>
-map <Leader>rt :wa<CR>:call VimuxRunCommand("clear; rspec " . bufname("%"))<CR>
-map <Leader>ra :wa<CR>:call VimuxRunCommand("clear; rspec")<CR>
-map <Leader>rs :wa<CR>:call VimuxRunCommand("clear; rspec " . bufname("%") . ":" . line("."))<CR>
+map <Leader>rt :wa<CR>:call VimuxRunCommand("clear; bundle exec rspec " . bufname("%"))<CR>
+map <Leader>ra :wa<CR>:call VimuxRunCommand("clear; bundle exec rspec")<CR>
+map <Leader>rs :wa<CR>:call VimuxRunCommand("clear; bundle exec rspec " . bufname("%") . ":" . line("."))<CR>
 map <Leader>vl :wa<CR>:VimuxRunLastCommand<CR>
 
 " ctags
-nnoremap <Leader>ca :!ctags -R<CR>
+nnoremap <silent><Leader>ta :!ctags -R<CR>
 
 " hit ,f to find the definition of the current class
 " this uses ctags. the standard way to get this is Ctrl-]
@@ -102,19 +107,38 @@ set undolevels=1000 "maximum number of changes that can be undone
 set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 
 map <silent> <LocalLeader>nt :NERDTreeToggle<CR>
+let g:NERDTreeWinSize = 30
 map <silent> <LocalLeader>nr :NERDTree<CR>
 map <silent> <LocalLeader>nf :NERDTreeFind<CR>
 let NERDTreeShowHidden=1
 
-map <silent> <LocalLeader>t :CommandT<CR>
-map <silent> <LocalLeader>cf :CommandTFlush<CR>
-map <silent> <LocalLeader>cb :CommandTBuffer<CR>
-map <silent> <LocalLeader>cj :CommandTJump<CR>
-map <silent> <LocalLeader>ct :CommandTTag<CR>
-let g:CommandTAcceptSelectionSplitMap=['<C-s>']
-let g:CommandTAcceptSelectionVSplitMap=['<C-v>']
-let g:CommandTCancelMap=['<Esc>', '<C-c>']
-let g:CommandTMaxHeight=10
+" not using command t any more
+"map <silent> <LocalLeader>t :CommandT<CR>
+"map <silent> <LocalLeader>cf :CommandTFlush<CR>
+"map <silent> <LocalLeader>cb :CommandTBuffer<CR>
+"map <silent> <LocalLeader>cj :CommandTJump<CR>
+"map <silent> <LocalLeader>ct :CommandTTag<CR>
+"let g:CommandTAcceptSelectionSplitMap=['<C-s>']
+"let g:CommandTAcceptSelectionVSplitMap=['<C-v>']
+"let g:CommandTCancelMap=['<Esc>', '<C-c>']
+"let g:CommandTMaxHeight=10
+
+
+" If the current buffer has never been saved, it will have no name,
+" call the file browser to save it, otherwise just save it.
+command! -nargs=0 -bar SaveFile if &modified
+      \|    if empty(bufname('%'))
+        \|        browse confirm write
+        \|    else
+          \|        confirm write
+          \|    endif
+          \|endif
+
+nnoremap <silent> <C-S> :<C-u>SaveFile<CR>
+inoremap <c-s> <Esc>:SaveFile<CR>
+inoremap <c-s> <c-o>:SaveFile<CR>
+vmap <C-s> <esc>:w<CR>gv
+
 
 imap <C-L> <SPACE>=><SPACE>
 
@@ -122,10 +146,17 @@ imap <C-L> <SPACE>=><SPACE>
 map <silent> <LocalLeader>gg :Ggrep <C-R><C-W><CR>
 
 " copy and paste to Mac OS X clipboard
-noremap <leader>y "*y
 noremap <leader>p :set paste<CR>"*p<CR>:set nopaste<CR>
-noremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
+noremap <leader>P :set paste<CR>"*p<CR>:set nopaste<CR>
 vnoremap <leader>y "*ygv
+noremap <leader>y "*y
+
+" capital Y acts like C, D
+noremap Y y$
+
+" move to beginning/end of line
+nnoremap B ^
+nnoremap E $
 
 " window width
 set winwidth=90
@@ -149,12 +180,14 @@ noremap k gk
 noremap gj j
 noremap gk k
 
+nnoremap <Leader>r <nop>
+
 " clean trailing whitespace
 nnoremap <leader>w mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
 " Emacs bindings in command line mode
-cnoremap <c-a> <home>
-cnoremap <c-e> <end>
+"cnoremap <c-a> <home>
+"cnoremap <c-e> <end>
 
 " keep the cursor in place while joining lines
 nnoremap J mzJ`z
@@ -176,23 +209,6 @@ nnoremap <leader>ft Vatzf
 
 " CSS properties sorting
 nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
-
-let vimclojure#HighlightBuiltins=0
-let vimclojure#ParenRainbow=1
-
-command! ScratchToggle call ScratchToggle()
-
-function! ScratchToggle()
-    if exists("w:is_scratch_window")
-        unlet w:is_scratch_window
-        exec "q"
-    else
-        exec "normal! :Sscratch\<cr>\<C-W>L"
-        let w:is_scratch_window = 1
-    endif
-endfunction
-
-nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 "set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim

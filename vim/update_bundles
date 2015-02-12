@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 git_bundles = [
+  "https://github.com/tpope/vim-sensible",
+  "https://github.com/christoomey/vim-tmux-navigator",
   "git://github.com/ervandew/supertab.git",
   "git://github.com/scrooloose/nerdtree.git",
   "git://github.com/tpope/vim-surround.git",
@@ -9,7 +11,11 @@ git_bundles = [
   "git://github.com/vim-ruby/vim-ruby.git",
   "git://github.com/tpope/vim-abolish.git",
   "git://github.com/kien/ctrlp.vim.git",
-  "git://github.com/mattn/emmet-vim.git"
+  "git://github.com/mattn/emmet-vim.git",
+  "https://github.com/benmills/vimux",
+  "https://github.com/tpope/vim-unimpaired",
+  "https://github.com/tpope/vim-endwise",
+  "https://github.com/scrooloose/nerdcommenter"
 ]
 
 #"vim_org_scripts = [

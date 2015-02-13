@@ -17,7 +17,8 @@ git_bundles = [
   "https://github.com/benmills/vimux",
   "https://github.com/tpope/vim-unimpaired",
   "https://github.com/tpope/vim-endwise",
-  "https://github.com/scrooloose/nerdcommenter"
+  "https://github.com/scrooloose/nerdcommenter",
+  "https://github.com/Lokaltog/vim-easymotion"
 ]
 
 #"vim_org_scripts = [
